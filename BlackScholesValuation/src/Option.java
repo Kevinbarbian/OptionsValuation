@@ -1,4 +1,9 @@
-
+/**
+ * This class represents a single Option.
+ * 
+ * @author kevinbarbian
+ *
+ */
 public class Option {
 
 	private double stockPrice;
