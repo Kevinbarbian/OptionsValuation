@@ -107,7 +107,7 @@ public class Option {
 	public double PNDF(double x) {
 		return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(-(x * x) / 2);
 	}
-
+	// Source from: http://www.codeproject.com/Messages/2622967/Re-NORMSDIST-function.aspx
 	public double CNDF(double x) {
 		int neg = (x < 0d) ? 1 : 0;
 		if (neg == 1)
