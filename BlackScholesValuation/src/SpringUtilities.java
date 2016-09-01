@@ -6,6 +6,7 @@ import java.awt.*;
  * creating form- or grid-style layouts with SpringLayout.
  * These utilities are used by several programs, such as
  * SpringBox and SpringCompactGrid.
+ * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.
  */
 public class SpringUtilities {
     /**

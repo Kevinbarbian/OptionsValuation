@@ -1,6 +1,7 @@
 /*
  * A 1.4 application that uses SpringLayout to create a forms-type layout.
  * Other files required: SpringUtilities.java.
+ * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.
  */
 import javax.swing.*;
 import java.awt.*;

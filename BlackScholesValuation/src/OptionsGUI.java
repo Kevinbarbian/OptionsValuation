@@ -1,11 +1,13 @@
 import java.awt.event.*;
 
+
 import javax.swing.*;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
+//A basic GUI lacking functionality
 public class OptionsGUI implements ActionListener {
 	public static void main(String[] args){
 		OptionsGUI g = new OptionsGUI();
@@ -106,13 +108,6 @@ public class OptionsGUI implements ActionListener {
 		Object source = event.getSource();
 		if (source == calculate){
 			Option o = new Option(Double.parseDouble(fields[0].getText()),2,2,2,2);
-		
-		}
-		else {
-			JOptionPane.showMessageDialog(null, "Lead Developer: Kevin Barbian");
 		}
 	}
-//	public void runPrisonScene(){
-//		JOptionPane.showMessageDialog(null,"...");
-//	}
 }
