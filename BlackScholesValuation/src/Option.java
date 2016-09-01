@@ -4,45 +4,110 @@
  * @author kevinbarbian
  *
  */
+
 public class Option {
+	public static void main(String[] args) {
+		Option one = new Option(27.07,20,.05,.46,30);
+		System.out.println(one.valuateCallOption());
+		System.out.println(one.valuatePutOption());
+		System.out.println(one.getCallDelta());
+		System.out.println(one.getPutDelta());
+		System.out.println(one.getPutRho());
 
-	private double stockPrice;
-	private double strikePrice;
-	private double riskFreeRate;
-	private double volatility;
-	private double years;
-	double discountedProbabilityFactor = (Math.log(stockPrice / strikePrice) + ((riskFreeRate + ((volatility * volatility) / 2)) * years))
-			/ (volatility * Math.sqrt(years));
-	
-	double exerciseProbabilityFactor = discountedProbabilityFactor - (volatility * Math.sqrt(years));
-	
-	public Option(double stockPrice, double strikePrice, double riskFreeRate, double volatility, double days){
-		this.stockPrice = stockPrice;
-		this.strikePrice = strikePrice;
-		this.riskFreeRate = riskFreeRate;
-		this.volatility = volatility;
-		this.years = days/365;
 	}
-	public double valuateCallOption() {
-		double discountedProbabilityFactor = (Math.log(stockPrice / strikePrice) + ((riskFreeRate + ((volatility * volatility) / 2)) * years))
-				/ (volatility * Math.sqrt(years));
-		
-		double exerciseProbabilityFactor = discountedProbabilityFactor - (volatility * Math.sqrt(years));
-		return (stockPrice * CNDF(discountedProbabilityFactor))
-				- (strikePrice * Math.exp(-riskFreeRate * years)) * CNDF(exerciseProbabilityFactor);
+
+	private double S;
+	private double K;
+	private double r;
+	private double v;
+	private double tau;
+	private double dPF; // discounted probability factor
+	private double ePF; // exercise probability factor
+
+	public Option(double S, double K, double r, double v, double tau) {
+		this.S = S;
+		this.K = K;
+		this.r = r;
+		this.v = v;
+		tau = tau/365;
+		this.tau = tau;
+		this.dPF = (Math.log(S / K) + ((r + (v * v) / 2)) * tau)
+				/ (v * Math.sqrt(tau));
+		this.ePF = dPF - (v * Math.sqrt(tau));
+
 	}
-	// Calculate put option value based on Black-Scholes
+
+	public double getS() {
+		return S;
+	}
+
+	public double getK() {
+		return K;
+	}
+
+	public double getRate() {
+		return r;
+	}
+
+	public double getv() {
+		return v;
+	}
+
+	public double gettau() {
+		return tau;
+	}
+
+	public double getDPF() {
+		return dPF;
+	}
+
+	public double getEPF() {
+		return ePF;
+	}
+
 	public double valuatePutOption() {
-		double discountedProbabilityFactor = (Math.log(stockPrice / strikePrice) + ((riskFreeRate + ((volatility * volatility) / 2)) * years))
-				/ (volatility * Math.sqrt(years));
-		
-		double exerciseProbabilityFactor = discountedProbabilityFactor - (volatility * Math.sqrt(years));
-		return (strikePrice * Math.exp(-riskFreeRate * years) * CNDF(-exerciseProbabilityFactor))
-				- (stockPrice * CNDF(-discountedProbabilityFactor));
+		return (getK() * Math.exp(-getRate() * gettau()) * CNDF(-getEPF()))
+				- (getS() * CNDF(-getDPF()));
 	}
 
-	// returns the cumulative normal distribution function (CNDF)
-	// for a standard normal: N(0,1)
+	public double valuateCallOption() {
+		return (S * CNDF(dPF)) - (K * Math.exp(-r * tau)) * CNDF(ePF);
+	}
+
+	public double getCallDelta() {
+		return CNDF(dPF);
+	}
+
+	public double getPutDelta() {
+		return getCallDelta() - 1;
+	}
+
+	public double getCallTheta() {
+		return ((-S * v * PNDF(dPF) * 0.5 * Math.sqrt(tau))
+				- (r * K * Math.exp(-r * tau) * CNDF(ePF))) / 365;
+	}
+
+	public double getPutTheta() {
+		return ((-S * v * PNDF(dPF) * 0.5 * Math.sqrt(tau))
+				+ (r * K * Math.exp(-r * tau) * CNDF(-ePF))) / 365;
+	}
+
+	public double getCallRho() {
+		return K * tau * Math.exp(-r * tau) * CNDF(ePF) / 100;
+	}
+
+	public double getPutRho() {
+		return -K * tau * Math.exp(-r * tau) * CNDF(-ePF) / 100;
+	}
+
+	public double getGamma() {
+		return PNDF(dPF) / (S * v * Math.sqrt(tau));
+	}
+
+	public double PNDF(double x) {
+		return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(-(x * x) / 2);
+	}
+
 	public double CNDF(double x) {
 		int neg = (x < 0d) ? 1 : 0;
 		if (neg == 1)
@@ -54,43 +119,5 @@ public class Option {
 
 		return (1d - neg) * y + neg * (1d - y);
 	}
-	public double getCallDelta(){
-		double discountedProbabilityFactor = (Math.log(stockPrice / strikePrice) + ((riskFreeRate + ((volatility * volatility) / 2)) * years))
-				/ (volatility * Math.sqrt(years));
-		
-		double exerciseProbabilityFactor = discountedProbabilityFactor - (volatility * Math.sqrt(years));
-		return CNDF(discountedProbabilityFactor);
-	}
-	public double getPutDelta(){
-		double discountedProbabilityFactor = (Math.log(stockPrice / strikePrice) + ((riskFreeRate + ((volatility * volatility) / 2)) * years))
-				/ (volatility * Math.sqrt(years));
-		
-		double exerciseProbabilityFactor = discountedProbabilityFactor - (volatility * Math.sqrt(years));
-		return getCallDelta() - 1;
-	}
-	public double getCallTheta(){
-		double discountedProbabilityFactor = (Math.log(stockPrice / strikePrice) + ((riskFreeRate + ((volatility * volatility) / 2)) * years))
-				/ (volatility * Math.sqrt(years));
-		
-		double exerciseProbabilityFactor = discountedProbabilityFactor - (volatility * Math.sqrt(years));
-		return ((-stockPrice * volatility * PNDF(discountedProbabilityFactor)) * (Math.sqrt(years)/2)) - (riskFreeRate*strikePrice*Math.exp(-riskFreeRate*years)*CNDF(exerciseProbabilityFactor));
-	}
-	public double PNDF(double x){
-		return (1/Math.sqrt(2*Math.PI)) * Math.exp(-(x*x)/2);
-	}
 
 }
-//callTheta = (-S*sigma*NPrime)*.5*sqrt(tau) - r*K*exp(-r*tau)*N2
-//putTheta = -S*sigma*NPrime*.5*sqrt(tau) + (r*K*exp(-r*tau))*N22
-//C = S*N1-(K*exp(-r*tau))*N2 #good
-//P = K*exp(-r*tau)*N22 - S*N11 #good
-//callDelta = N1 #good
-//putDelta = N1 - 1 #good
-//callVega = (S*sqrt(tau))*(exp(-0.5 * d1**2)/sqrt(2*pi))/100 #good
-//putVega = callVega #good
-//callTheta = callTheta/365
-//putTheta = putTheta/365
-//callGamma = NPrime/(S*sigma*sqrt(tau))
-//putGamma = callGamma
-//callRho = K*tau*exp(-r*tau)*N2/100 #good
-//putRho = -K*tau*exp(-r*tau)*N22/100 #good

@@ -4,8 +4,8 @@ public class BlackScholes {
 	Option one = new Option(27.07,20,.05,.46,365);
 	System.out.println(one.valuateCallOption());
 	System.out.println(one.valuatePutOption());
-	System.out.println(one.getCallTheta());
-		
+	System.out.println(one.getCallRho());
+	System.out.println(one.getPutRho());
 		
 	}
 }
