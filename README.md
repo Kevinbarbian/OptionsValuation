@@ -5,9 +5,13 @@ A Black-Scholes Calculator for Java, Kevin Barbian, September 8, 2016.
 CONTENTS
 -------------------------------------------
 I. ABOUT
+
 II. LIST OF FILES
+
 III. DESIGN
+
 IV. MOTIVATION
+
 V. TEST
 
 
