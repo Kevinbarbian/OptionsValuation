@@ -1,19 +1,14 @@
 /**
- * This class represents a single Option.
+ * This class represents a single European Option.
  * 
- * @author kevinbarbian
+ * @author Kevin Barbian
  *
  */
 
 public class Option {
 	public static void main(String[] args) {
-		Option one = new Option(27.07,20,.05,.46,30);
-		System.out.println(one.valuateCallOption());
-		System.out.println(one.valuatePutOption());
-		System.out.println(one.getCallDelta());
-		System.out.println(one.getPutDelta());
-		System.out.println(one.getPutRho());
-
+		Option one = new Option(27.07, 20, .05, .46, 30);
+		System.out.println(one.getPutTheta());
 	}
 
 	private double S;
@@ -29,45 +24,15 @@ public class Option {
 		this.K = K;
 		this.r = r;
 		this.v = v;
-		tau = tau/365;
+		tau = tau / 365;
 		this.tau = tau;
-		this.dPF = (Math.log(S / K) + ((r + (v * v) / 2)) * tau)
-				/ (v * Math.sqrt(tau));
+		this.dPF = (Math.log(S / K) + ((r + (v * v) / 2)) * tau) / (v * Math.sqrt(tau));
 		this.ePF = dPF - (v * Math.sqrt(tau));
 
 	}
 
-	public double getS() {
-		return S;
-	}
-
-	public double getK() {
-		return K;
-	}
-
-	public double getRate() {
-		return r;
-	}
-
-	public double getv() {
-		return v;
-	}
-
-	public double gettau() {
-		return tau;
-	}
-
-	public double getDPF() {
-		return dPF;
-	}
-
-	public double getEPF() {
-		return ePF;
-	}
-
 	public double valuatePutOption() {
-		return (getK() * Math.exp(-getRate() * gettau()) * CNDF(-getEPF()))
-				- (getS() * CNDF(-getDPF()));
+		return (K * Math.exp(-r * tau) * CNDF(-ePF)) - (S * CNDF(-dPF));
 	}
 
 	public double valuateCallOption() {
@@ -83,13 +48,16 @@ public class Option {
 	}
 
 	public double getCallTheta() {
-		return ((-S * v * PNDF(dPF) * 0.5 * Math.sqrt(tau))
-				- (r * K * Math.exp(-r * tau) * CNDF(ePF))) / 365;
+		double chunk1 = -r * K * Math.exp(-r * tau) * CNDF(ePF);
+		double chunk2 = (v * S * PNDF(dPF)) / (2 * Math.sqrt(tau));
+		return (chunk1 - chunk2) / 365;
 	}
 
 	public double getPutTheta() {
-		return ((-S * v * PNDF(dPF) * 0.5 * Math.sqrt(tau))
-				+ (r * K * Math.exp(-r * tau) * CNDF(-ePF))) / 365;
+		double chunk1 = r * K * Math.exp(-r * tau) * CNDF(-ePF);
+		double chunk2 = (v * S * PNDF(dPF)) / (2 * Math.sqrt(tau));
+		return (chunk1 - chunk2) / 365;
+
 	}
 
 	public double getCallRho() {
@@ -104,10 +72,16 @@ public class Option {
 		return PNDF(dPF) / (S * v * Math.sqrt(tau));
 	}
 
+	public double getVega() {
+		return S * Math.sqrt(tau) * PNDF(dPF) / 1000;
+	}
+
 	public double PNDF(double x) {
 		return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(-(x * x) / 2);
 	}
-	// Source from: http://www.codeproject.com/Messages/2622967/Re-NORMSDIST-function.aspx
+
+	// Source from:
+	// http://www.codeproject.com/Messages/2622967/Re-NORMSDIST-function.aspx
 	public double CNDF(double x) {
 		int neg = (x < 0d) ? 1 : 0;
 		if (neg == 1)
