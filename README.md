@@ -42,18 +42,28 @@ This program was originally designed using Python, but I decided to re-write it 
 V. TEST
 -------------------------------------------
 Input:
+
 Underlying Price: 95
+
 Strike Price: 90
+
 Risk-free interest rate: .05
+
 Volatility: .20
+
 Time: 30
 
 Output:
              Call Option 				Put Option
 
 Value:				5.7977					   0.4286
+
 Delta:				0.8516					  -0.1484
+
 Gamma:				0.0425						 0.0425
+
 Rho:				  0.0617					  -0.0119
+
 Theta:			 -0.0313					  -0.019
+
 Vega:			  	0.0063						 0.006
