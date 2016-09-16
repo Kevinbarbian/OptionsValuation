@@ -40,7 +40,7 @@ Input from the user interface is passed as parameters to the Option class.  Afte
 
 IV. MOTIVATION
 -------------------------------------------
-This program was originally designed using Python, but I decided to re-write it in Java to see how it would go.  The purpose of this project was to learn more about GUI design and to create a client friendly interface for calculating European options. 
+The purpose of this project was to learn more about GUI design and to create a client friendly interface for calculating European options. 
 
 
 V. TEST
