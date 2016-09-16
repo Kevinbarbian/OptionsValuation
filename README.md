@@ -23,9 +23,13 @@ Options are one of the main financial derivatives that are traded in the markets
 II. LIST OF FILES
 -------------------------------------------
 Option.java						Performs calculations of Greek values
+
 OptionsGUI.java					Simple user interface built with swing
+
 OptionsClient.java				Client program 
+
 SpringForm.java 				Formatting GUI
+
 SpringUtilities.java 			Formatting GUI
 
 
